@@ -13,7 +13,7 @@ const LeftLayout = () => {
     <div>
       <Sidebar setClickedPlaylist={setClickedPlaylist} />
       {console.log("sending this",clickedPlaylist)}
-     <Tabs playlist={clickedPlaylist} />
+     <Tabs playlist={clickedPlaylist} search="Star" />
     </div>
   )
 }

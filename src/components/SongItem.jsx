@@ -29,7 +29,7 @@ opacity: 0.6;
 
 
 const SongItem = ({details}) => {
-    console.log('inside songs ',details)
+
   return (
     <Box mt="10px" ml="10px">
     <Box display={"flex"}> 

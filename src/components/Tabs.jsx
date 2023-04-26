@@ -1,7 +1,8 @@
-import React from "react";
+import React , {useState} from "react";
 import { Box, Typography ,styled } from "@mui/material";
 import { useQuery, gql } from "@apollo/client";
 import SongItem from "./SongItem";
+import { useEffect } from "react";
 
 const Wrapper = styled(Box)`
   position: absolute;
@@ -24,27 +25,54 @@ color: #FFFFFF;
 `; 
 
 const Tabs = ({ playlist }) => {
-  console.log("inside tabs ", playlist);
+ const [search, setSearchString] = useState("");
+  const normal = ""; 
   const playlistId = playlist.id;
   const playlistName = playlist.name;
-
-  const GET_SONGS = gql`
-  query {
-    getSongs(playlistId: ${playlistId}) {
+  const work = "S";
+ 
+  const GET_SONGS = gql` 
+  query{
+    getSongs(playlistId: ${playlistId},search:"${search}") {
       title,
       photo,
       duration,
       artist,
     }
-  }
-`;
+  }`;
+  
+  console.log("type = ",typeof(GET_SONGS));
+  console.log("value = ",GET_SONGS);
+  
+  // const GET_SONGS = gql` 
+  // query GetSongs($playlistId: Int!, $search: string!) {
+  //   getSongs(playlistId: $playlistId, search: $search) {
+  //     _id,
+  //     artist,
+  //     photo,
+  //     url,
+  //     title,
+  //     duration,
+  //   }
+  // }
+  // `;
+  
 
-  const songs = useQuery(GET_SONGS);
-  if (!songs.loading) console.log(songs.data.getSongs);
+  
+
+
+  const songs =  useQuery(GET_SONGS, 
+   {variables:{"playlistId":1,"search":""}},
+  );
+
+
+  console.log("songs array is = ",songs);
+
 
   return <Wrapper>
      <StyledName>{playlistName}</StyledName>
-     {!songs.loading && 
+     <input type="text" placeholder="Search..." value={search} onChange={(event)=>setSearchString(event.target.value)}  />
+     { !songs.loading && 
          songs.data.getSongs.map((song)=><SongItem key={song.id} details={song}/>)
      } 
    </Wrapper>;
