@@ -1,39 +1,31 @@
-import {Box , styled} from "@mui/material";
+import { Box, styled, Stack,Container } from "@mui/material";
 import LeftLayout from "./components/LeftLayout";
 import Player from "./components/Player";
 
-const Wrapper = styled(Box)`
- border:2px solid red;
- display:flex;
- background:gray;
- height:100vh;
- width:100vw;
+const Wrapper = styled(Container)`
+  border: 2px solid red;
+  background: black;
 `;
 
-const Leftpane = styled(Box)`
-display:flex;
-border:2px solid blue;
-width:auto;
-height:auto;
-`;
+const Leftpane = styled(Box)(({ theme }) => ({
+  display: "flex",
+  "flex-direction": "column",
+  border: "2px solid blue",
+}));
 
-
-const App = ()=>{
-
+const App = () => {
   return (
-   <Wrapper> 
-       <Leftpane>
-         <LeftLayout/>
-       </Leftpane>
-       <Box>
-           <Player/>
-       </Box>
-   
-   
-   </Wrapper>
-  )
-
-}
-
+    <Box  bgcolor={"black"} height="100vh" >
+      <Stack 
+        direction="row"
+        spacing={0}
+        justifyItems="center"
+      >
+        <LeftLayout  />
+        <Player  />
+      </Stack>
+    </Box>
+  );
+};
 
 export default App;

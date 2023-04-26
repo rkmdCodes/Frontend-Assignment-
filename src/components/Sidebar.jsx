@@ -5,63 +5,78 @@ import { useQuery, gql } from "@apollo/client";
 import Tabs from "../components/Tabs";
 
 const Wrapper = styled(Box)`
+  mt:'32px';
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  padding: 0px;
-  gap: 16px;
   border: 2px solid yellow;
-  position: absolute;
-  width: 150px;
-  height: 176px;
-  left: 32px;
-  top: 102px;
 `;
 
+
 const Logo = styled("img")({
-  position: "absolute",
-  left: "0.71%",
-  right: "0.71%",
-  top: "1.18%",
-  bottom: "0.29%",
+  "margin-top":"32px",
+  "margin-left":"32px"
 });
 
-const PlaylistName = styled(Button)`
-width: auto;
-height: auto;
+const PlaylistName = styled(Typography)`
+gap:"100px";
 font-family: 'Varela Round';
 font-style: normal;
-font-weight: 400;
-font-size: 16px;
-line-height: 22px;
+font-size: 20px;
 color: #FFFFFF;
 opacity: 0.4;
 `; 
 
 
-const GET_PLAYLISTS = gql`
-  query {
-    getPlaylists {
-      id
-      title
-    }
+const dataTemp = [
+  {
+    "id":"1",
+    "title":"For You"
+  },
+  {
+    "id":"2",
+    "title":"Top Songs"
+  },
+  {
+    "id":"3",
+    "title":"Three"
+  },
+  {
+    "id":"4",
+    "title":"Five"
   }
-`;
+
+]
+
+// const GET_PLAYLISTS = gql`
+//   query {
+//     getPlaylists {
+//       id
+//       title
+//     }
+//   }
+// `;
 
 const Sidebar = ({setClickedPlaylist}) => {
-  const playlists = useQuery(GET_PLAYLISTS);
-  if (!playlists.loading) console.log(playlists.data.getPlaylists[0].title);
+  // const playlists = useQuery(GET_PLAYLISTS);
+  // if (!playlists.loading) console.log(playlists.data.getPlaylists[0].title);
 
   return (
     <Box>
-      <Logo src={LogoPng} />
-      <Wrapper>
-        {!playlists.loading &&
+     <Logo src={LogoPng} />
+      <Wrapper mt="28px" flex={1}>
+      
+       {/* {!playlists.loading &&
           playlists.data.getPlaylists.map((playlist) => (
             <PlaylistName onClick={()=>setClickedPlaylist({id:playlist.id,name:playlist.title})} key={playlist.id}>{playlist.title}</PlaylistName>
-          ))}
+          ))}*/}
+          {
+            dataTemp.map((playlist) => (
+              <PlaylistName  ml="32px" onClick={()=>setClickedPlaylist({id:playlist.id,name:playlist.title})} key={playlist.id}>{playlist.title}</PlaylistName>
+            ))  
+  
+          }
       </Wrapper>
-    </Box>
+      </Box>
   );
 };
 
