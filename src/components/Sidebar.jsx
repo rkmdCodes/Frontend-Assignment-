@@ -8,7 +8,7 @@ const Wrapper = styled(Box)`
   mt:'32px';
   display: flex;
   flex-direction: column;
-  border: 2px solid yellow;
+  
 `;
 
 
@@ -47,34 +47,29 @@ const dataTemp = [
 
 ]
 
-// const GET_PLAYLISTS = gql`
-//   query {
-//     getPlaylists {
-//       id
-//       title
-//     }
-//   }
-// `;
+const GET_PLAYLISTS = gql`
+  query {
+    getPlaylists {
+      id
+      title
+    }
+  }
+`;
 
 const Sidebar = ({setClickedPlaylist}) => {
-  // const playlists = useQuery(GET_PLAYLISTS);
-  // if (!playlists.loading) console.log(playlists.data.getPlaylists[0].title);
+  const playlists = useQuery(GET_PLAYLISTS);
+  if (!playlists.loading) console.log(playlists.data.getPlaylists[0].title);
 
   return (
     <Box>
      <Logo src={LogoPng} />
       <Wrapper mt="28px" flex={1}>
       
-       {/* {!playlists.loading &&
+       { !playlists.loading &&
           playlists.data.getPlaylists.map((playlist) => (
             <PlaylistName onClick={()=>setClickedPlaylist({id:playlist.id,name:playlist.title})} key={playlist.id}>{playlist.title}</PlaylistName>
-          ))}*/}
-          {
-            dataTemp.map((playlist) => (
-              <PlaylistName  ml="32px" onClick={()=>setClickedPlaylist({id:playlist.id,name:playlist.title})} key={playlist.id}>{playlist.title}</PlaylistName>
-            ))  
-  
-          }
+          ))}
+
       </Wrapper>
       </Box>
   );

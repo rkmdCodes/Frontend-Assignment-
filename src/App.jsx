@@ -1,19 +1,26 @@
 import { Box, styled, Stack,Container } from "@mui/material";
 import LeftLayout from "./components/LeftLayout";
 import Player from "./components/Player";
+import {useState} from "react";
 
 const Wrapper = styled(Container)`
-  border: 2px solid red;
+  
   background: black;
 `;
 
 const Leftpane = styled(Box)(({ theme }) => ({
   display: "flex",
   "flex-direction": "column",
-  border: "2px solid blue",
+
 }));
 
 const App = () => {
+ 
+  const [songUrl, setSongUrl] = useState({
+    photo:"",
+    url:"",
+  });
+  console.log("this is song",songUrl);
   return (
     <Box  bgcolor={"black"} height="100vh" >
       <Stack 
@@ -21,8 +28,8 @@ const App = () => {
         spacing={0}
         justifyItems="center"
       >
-        <LeftLayout  />
-        <Player  />
+        <LeftLayout setSongUrl={setSongUrl}  />
+        <Player songUrl={songUrl} />
       </Stack>
     </Box>
   );

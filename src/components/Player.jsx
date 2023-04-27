@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Box,
   styled,
@@ -78,12 +78,25 @@ const CustomSlider = styled(Slider)({
   },
 });
 
-export default function Player() {
+function Player({ songUrl }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [volume, setVolume] = useState(1);
   const audioRef = useRef(null);
+
+  useEffect(() => {
+    if (audioRef.current) {
+      console.log("if is running");
+      audioRef.current.pause();
+      audioRef.current.load();
+      audioRef.current.currentTime = 0;
+      playAudio();
+      setCurrentTime(0);
+    }
+  }, [songUrl]);
+
+  console.log("set is playing = ", isPlaying);
 
   const togglePlay = () => {
     if (isPlaying) {
@@ -97,6 +110,14 @@ export default function Player() {
   const handleTimeUpdate = () => {
     setCurrentTime(audioRef.current.currentTime);
     setDuration(audioRef.current.duration);
+  };
+
+  const playAudio = () => {
+    if (audioRef !== null) {
+      audioRef.current.play();
+      setIsPlaying(true);
+    } else 
+    setIsPlaying(false);
   };
 
   const handleVolumeChange = () => {
@@ -114,19 +135,19 @@ export default function Player() {
   };
 
   return (
-    <Box flex={1} border="2px solid magenta">
+    <Box flex={1} >
       <Card sx={{ margin: 5, background: "transparent" }}>
         <CardMedia
           component="img"
-          image="https://images.genius.com/e95f361c27487088fd9dddf8c967bf89.500x500x1.jpg"
+          image={songUrl.photo}
           alt="cover image"
-          style={{objectFit: "cover" }}
+          style={{ objectFit: "cover" }}
         />
         <CardContent>
           <SongName>Player</SongName>
           <audio
             ref={audioRef}
-            src="https://pagalworld.nl/files/download/id/26691"
+            src={songUrl.url}
             onTimeUpdate={handleTimeUpdate}
             onVolumeChange={handleVolumeChange}
           />
@@ -173,45 +194,6 @@ export default function Player() {
       </Card>
     </Box>
   );
-
-  // return (
-  //   <Wrapper>
-  //     <SongName>Player</SongName>
-  //     <audio
-  //       ref={audioRef}
-  //       src="https://pagalworld.nl/files/download/id/26691"
-  //       onTimeUpdate={handleTimeUpdate}
-  //       onVolumeChange={handleVolumeChange}
-  //     />
-  //     <AlbumArt src={"https://images.genius.com/e95f361c27487088fd9dddf8c967bf89.500x500x1.jpg"} alt="cover image"/>
-  //     <StyledControl>
-  //       <CustomSlider
-  //         value={currentTime}
-  //         min={0}
-  //         max={duration}
-  //         onChange={handleSeek}
-  //       />
-
-  //       <Box sx={{ display: "flex", flexDirection: "row" ,justifyContent:"space-between"}}>
-  //         {isPlaying ? (
-  //           <PauseCircleFilledIcon
-  //             sx={{ fontSize: "50px" }}
-  //             onClick={togglePlay}
-  //           />
-  //         ) : (
-  //           <PlayCircleIcon sx={{ fontSize: "50px" }} onClick={togglePlay} />
-  //         )}
-
-  //         <CustomSlider
-  //           value={volume}
-  //           min={0}
-  //           max={1}
-  //           step={0.01}
-  //           onChange={handleVolume}
-  //           sx={{ width: 100 }}
-  //         />
-  //       </Box>
-  //     </StyledControl>
-  //   </Wrapper>
-  // );
 }
+
+export default Player;

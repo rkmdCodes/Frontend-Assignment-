@@ -23,21 +23,23 @@ font-size: 14px;
 line-height: 24px;
 color: #FFFFFF;
 opacity: 0.6;
-
 `;
 
 
-
-const SongItem = ({details}) => {
+const SongItem = ({details,setSongUrl}) => {
 
   return (
     <Box mt="10px" ml="10px">
     <Box display={"flex"}> 
     <Avatar alt="song pic" src={`${details.photo}`} />
-    <Box sx={{display:"flex",flexDirection:"column" , marginLeft:"10px"}}>
+    <Box onClick={()=>setSongUrl({
+      photo:details.photo,
+      url:details.url
+    })} sx={{display:"flex",flexDirection:"column" , marginLeft:"10px"}}>
        <SongTitle>{details.title}</SongTitle>
        <ArtistName>{details.artist}</ArtistName>
     </Box>
+   
     </Box>
       
     </Box>
