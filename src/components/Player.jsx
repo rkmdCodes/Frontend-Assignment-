@@ -17,18 +17,10 @@ import { useQuery, gql } from "@apollo/client";
 import { useState, useRef } from "react";
 import PlayCircleIcon from "@mui/icons-material/PlayCircle";
 import PauseCircleFilledIcon from "@mui/icons-material/PauseCircleFilled";
+import { useContext } from "react";
+import { DataContext } from "../contex/DataProvider";
+import {AlbumArt,Wrapper} from "./PlayerCSS";
 
-const Wrapper = styled(Container)(({ theme }) => ({
-  border: "2px solid aqua",
-}));
-
-const AlbumArt = styled("img")({
-  'height':"100%",
-  'width':"100%",
-   'max-height':"400px",
-   'max-width':"400px",
-   'border-radius':"10px"
-});
 
 const PlayPauseButton = styled(Button)({
   color: "#fff",
@@ -86,16 +78,19 @@ const CustomSlider = styled(Slider)({
   },
 });
 
-function Player({ songUrl, setSongUrl }) {
+function Player() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [volume, setVolume] = useState(1);
   const audioRef = useRef(null);
+ 
+  const {songContex } = useContext(DataContext);
+  const {setSongContex } = useContext(DataContext);
 
   const GET_SONGS = gql`
   query{
-    getSongs(playlistId: ${songUrl.playlist},search:"") {
+    getSongs(playlistId: ${songContex.playlist},search:"") {
       title,
       photo,
       duration,
@@ -116,7 +111,7 @@ function Player({ songUrl, setSongUrl }) {
       playAudio();
       setCurrentTime(0);
     }
-  }, [songUrl]);
+  }, [songContex]);
 
   const togglePlay = () => {
     if (isPlaying) {
@@ -156,11 +151,12 @@ function Player({ songUrl, setSongUrl }) {
   const handleNext = () => {
     if (songUrl.index + 1 < songs.data.getSongs.length)
     {
-      setSongUrl((value) => ({
+      setSongContex((value) => ({
         ...value,
         index: songUrl.index + 1,
         photo: songs.data.getSongs[songUrl.index + 1].photo,
         url: songs.data.getSongs[songUrl.index + 1].url,
+        title:songs.data.getSongs[songUrl.index + 1].title
       }));
     }
    
@@ -168,11 +164,12 @@ function Player({ songUrl, setSongUrl }) {
 
   const handlePrev = () => {
     if (songUrl.index >= 1) {
-      setSongUrl((value) => ({
+      setSongContex((value) => ({
         ...value,
         index: songUrl.index - 1,
         photo: songs.data.getSongs[songUrl.index - 1].photo,
         url: songs.data.getSongs[songUrl.index - 1].url,
+        title:songs.data.getSongs[songUrl.index - 1].title
       }));
     }
   };
@@ -182,8 +179,8 @@ function Player({ songUrl, setSongUrl }) {
       <Box flex={1} border="2px solid blue">  
       <Stack direction="column" spacing={1} >
         <Box  border="2px solid red" flex={8} >
-           <SongName>{songs.data.getSongs[songUrl.index].title}</SongName>
-          <AlbumArt src={songUrl.photo}/> 
+           <SongName>{songContex.title}</SongName>
+          <AlbumArt src={songContex.photo}/> 
         </Box>
         <Box border="2px solid green" flex={2}>
         </Box>

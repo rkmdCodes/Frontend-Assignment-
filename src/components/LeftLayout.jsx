@@ -16,7 +16,7 @@ const LeftLayout = ({setSongUrl}) => {
         justifyContent="space-between"
       >
         <Sidebar setClickedPlaylist={setClickedPlaylist} />
-        <Tabs setSongUrl={setSongUrl} flexGrow={2} playlist={clickedPlaylist} search="Star" />
+        <Tabs  flexGrow={2} playlist={clickedPlaylist} search="Star" />
       </Stack>
     </Box>
   );

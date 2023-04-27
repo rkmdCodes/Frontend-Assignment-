@@ -92,7 +92,7 @@ const Tabs = ({ playlist, setSongUrl }) => {
       >
         {!songs.loading &&
           songs.data.getSongs.map((song,index) => (
-            <SongItem setSongUrl={setSongUrl} key={index} playlistId={playlistId} index={index}  details={song} />
+            <SongItem  key={index} playlistId={playlistId} index={index}  details={song} />
           ))}
       </Stack>
     </Wrapper>

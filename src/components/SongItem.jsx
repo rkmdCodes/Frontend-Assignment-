@@ -1,6 +1,8 @@
 import React from "react";
 import { Box, styled, Typography } from "@mui/material";
 import { Avatar } from "@mui/material";
+import { useContext } from "react";
+import { DataContext } from "../contex/DataProvider";
 
 const SongTitle = styled(Typography)`
   width: auto;
@@ -30,6 +32,10 @@ function formatDuration(durationInSeconds) {
 }
 
 const SongItem = ({index, playlistId, details, setSongUrl}) => {
+  
+ const {songContex}  = useContext(DataContext);
+ const {setSongContex} = useContext(DataContext);
+
   return (
     <Box display="flex" mt="10px" ml="10px" width="80%">
       <Box display="flex" flex={1.2}>
@@ -43,11 +49,13 @@ const SongItem = ({index, playlistId, details, setSongUrl}) => {
         flex={9}
         justifyContent="space-between"
         onClick={() =>
-          setSongUrl({
+          setSongContex({
             photo: details.photo,
             url: details.url,
             index:index,
-            playlist:playlistId
+            playlist:playlistId,
+            title:details.title
+
           })
         }
         sx={{ display: "flex", marginLeft: "10px" }}
