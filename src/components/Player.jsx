@@ -11,6 +11,7 @@ import {
   CardActions,
   CardActionArea,
   CardContent,
+  Stack
 } from "@mui/material";
 import { useQuery, gql } from "@apollo/client";
 import { useState, useRef } from "react";
@@ -21,7 +22,13 @@ const Wrapper = styled(Container)(({ theme }) => ({
   border: "2px solid aqua",
 }));
 
-const AlbumArt = styled("img")({});
+const AlbumArt = styled("img")({
+  'height':"100%",
+  'width':"100%",
+   'max-height':"400px",
+   'max-width':"400px",
+   'border-radius':"10px"
+});
 
 const PlayPauseButton = styled(Button)({
   color: "#fff",
@@ -169,69 +176,86 @@ function Player({ songUrl, setSongUrl }) {
       }));
     }
   };
+ 
 
-  return (
-    <Box flex={1}>
-      <button onClick={handleNext}>Next.js</button>
-      <button onClick={handlePrev}>Previous</button>
-      <Card sx={{ margin: 5, background: "transparent" }}>
-        <CardMedia
-          component="img"
-          image={songUrl.photo}
-          alt="cover image"
-          style={{ objectFit: "cover" }}
-        />
-        <CardContent>
-          <SongName>Player</SongName>
-          <audio
-            ref={audioRef}
-            src={songUrl.url}
-            onTimeUpdate={handleTimeUpdate}
-            onVolumeChange={handleVolumeChange}
-          />
+    return (
+      <Box flex={1} border="2px solid blue">  
+      <Stack direction="column" spacing={1} >
+        <Box  border="2px solid red" flex={8} >
+           <SongName>{songs.data.getSongs[songUrl.index].title}</SongName>
+          <AlbumArt src={songUrl.photo}/> 
+        </Box>
+        <Box border="2px solid green" flex={2}>
+        </Box>
+      </Stack>  
+  </Box>
+  
+    )
+  
 
-          <StyledControl>
-            <CustomSlider
-              value={currentTime}
-              min={0}
-              max={duration}
-              onChange={handleSeek}
-            />
+  // return (
+  //   <Box flex={1}>
+  //     <button onClick={handleNext}>Next.js</button>
+  //     <button onClick={handlePrev}>Previous</button>
+      
+  //     <Card sx={{ margin: 5, background: "transparent" }}>
+  //       <CardMedia
+  //         component="img"
+  //         image={songUrl.photo}
+  //         alt="cover image"
+  //         style={{ objectFit: "cover" }}
+  //       />
+  //       <CardContent>
+  //         <SongName>Player</SongName>
+  //         <audio
+  //           ref={audioRef}
+  //           src={songUrl.url}
+  //           onTimeUpdate={handleTimeUpdate}
+  //           onVolumeChange={handleVolumeChange}
+  //         />
 
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-              }}
-            >
-              {isPlaying ? (
-                <PauseCircleFilledIcon
-                  sx={{ fontSize: "50px" }}
-                  onClick={togglePlay}
-                />
-              ) : (
-                <PlayCircleIcon
-                  sx={{ fontSize: "50px" }}
-                  onClick={togglePlay}
-                />
-              )}
+  //         <StyledControl>
+  //           <CustomSlider
+  //             value={currentTime}
+  //             min={0}
+  //             max={duration}
+  //             onChange={handleSeek}
+  //           />
 
-              <CustomSlider
-                value={volume}
-                min={0}
-                max={1}
-                step={0.01}
-                onChange={handleVolume}
-                sx={{ width: 100 }}
-              />
-            </Box>
-          </StyledControl>
-        </CardContent>
-        <CardActions disableSpacing></CardActions>
-      </Card>
-    </Box>
-  );
+  //           <Box
+  //             sx={{
+  //               display: "flex",
+  //               flexDirection: "row",
+  //               justifyContent: "space-between",
+  //             }}
+  //           >
+  //             {isPlaying ? (
+  //               <PauseCircleFilledIcon
+  //                 sx={{ fontSize: "50px" }}
+  //                 onClick={togglePlay}
+  //               />
+  //             ) : (
+  //               <PlayCircleIcon
+  //                 sx={{ fontSize: "50px" }}
+  //                 onClick={togglePlay}
+  //               />
+  //             )}
+
+  //             <CustomSlider
+  //               value={volume}
+  //               min={0}
+  //               max={1}
+  //               step={0.01}
+  //               onChange={handleVolume}
+  //               sx={{ width: 100 }}
+  //             />
+  //           </Box>
+  //         </StyledControl>
+  //       </CardContent>
+  //       <CardActions disableSpacing></CardActions>
+  //     </Card>
+  //   </Box>
+  // );
 }
 
 export default Player;
