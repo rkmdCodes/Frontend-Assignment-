@@ -26,27 +26,6 @@ color: #FFFFFF;
 opacity: 0.4;
 `; 
 
-
-const dataTemp = [
-  {
-    "id":"1",
-    "title":"For You"
-  },
-  {
-    "id":"2",
-    "title":"Top Songs"
-  },
-  {
-    "id":"3",
-    "title":"Three"
-  },
-  {
-    "id":"4",
-    "title":"Five"
-  }
-
-]
-
 const GET_PLAYLISTS = gql`
   query {
     getPlaylists {
@@ -58,12 +37,11 @@ const GET_PLAYLISTS = gql`
 
 const Sidebar = ({setClickedPlaylist}) => {
   const playlists = useQuery(GET_PLAYLISTS);
-  if (!playlists.loading) console.log(playlists.data.getPlaylists[0].title);
 
   return (
     <Box>
      <Logo src={LogoPng} />
-      <Wrapper mt="28px" flex={1}>
+      <Wrapper mt="28px" gap="10px" marginLeft="32px" flex={4}>
       
        { !playlists.loading &&
           playlists.data.getPlaylists.map((playlist) => (

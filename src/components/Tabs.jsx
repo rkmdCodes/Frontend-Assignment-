@@ -3,8 +3,10 @@ import { makeStyles } from '@mui/styles';
 import { Box, Typography, styled, Stack } from "@mui/material";
 import { useQuery, gql } from "@apollo/client";
 import SongItem from "./SongItem";
-import { useEffect } from "react";
-const Wrapper = styled(Box)``;
+const Wrapper = styled(Box)`
+  'margin-left':'10px';
+  
+`;
 
 const useStyles = makeStyles({
   root: {
@@ -23,6 +25,7 @@ const StyledInput = styled("input")({
   background: "transparent",
   "border-radius": "5px",
   color: "#ffffff",
+  "backdrop-filter": "blur(200px)"
 });
 
 const StyledName = styled(Typography)`
@@ -40,10 +43,10 @@ const StyledName = styled(Typography)`
 const Tabs = ({ playlist, setSongUrl }) => {
   const classes = useStyles();
   const [search, setSearchString] = useState("");
-  const normal = "";
   const playlistId = playlist.id;
   const playlistName = playlist.name;
-  const work = "S";
+ 
+  
 
   const GET_SONGS = gql`
   query{
@@ -56,25 +59,13 @@ const Tabs = ({ playlist, setSongUrl }) => {
     }
   }`;
 
-  // const GET_SONGS = gql`
-  // query GetSongs($playlistId: Int!, $search: string!) {
-  //   getSongs(playlistId: $playlistId, search: $search) {
-  //     _id,
-  //     artist,
-  //     photo,
-  //     url,
-  //     title,
-  //     duration,
-  //   }
-  // }
-  // `;
 
   const songs = useQuery(GET_SONGS, {
     variables: { playlistId: 1, search: "" },
   });
 
   return (
-    <Wrapper flex={2}>
+    <Wrapper flex={5} sx={{paddingLeft:"32px"}}>
       <StyledName mt="30px" ml="32px">
         {playlistName}
       </StyledName>
@@ -90,15 +81,18 @@ const Tabs = ({ playlist, setSongUrl }) => {
       <Stack
         direction="column"
         alignItems="left"
+        marginLeft="32px"
+        marginTop="22px"
+        gap="18px"
         className={classes.root}
         style={{
-          height: "70%",
+          height: "570px",
           overflow: "auto",
         }}
       >
         {!songs.loading &&
-          songs.data.getSongs.map((song) => (
-            <SongItem setSongUrl={setSongUrl} key={song.id} details={song} />
+          songs.data.getSongs.map((song,index) => (
+            <SongItem setSongUrl={setSongUrl} key={index} playlistId={playlistId} index={index}  details={song} />
           ))}
       </Stack>
     </Wrapper>

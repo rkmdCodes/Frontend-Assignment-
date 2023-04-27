@@ -12,6 +12,7 @@ import {
   CardActionArea,
   CardContent,
 } from "@mui/material";
+import { useQuery, gql } from "@apollo/client";
 import { useState, useRef } from "react";
 import PlayCircleIcon from "@mui/icons-material/PlayCircle";
 import PauseCircleFilledIcon from "@mui/icons-material/PauseCircleFilled";
@@ -78,16 +79,30 @@ const CustomSlider = styled(Slider)({
   },
 });
 
-function Player({ songUrl }) {
+function Player({ songUrl, setSongUrl }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [volume, setVolume] = useState(1);
   const audioRef = useRef(null);
 
+  const GET_SONGS = gql`
+  query{
+    getSongs(playlistId: ${songUrl.playlist},search:"") {
+      title,
+      photo,
+      duration,
+      artist,
+      url,
+    }
+  }`;
+
+  const songs = useQuery(GET_SONGS, {
+    variables: { playlistId: 1, search: "" },
+  });
+
   useEffect(() => {
     if (audioRef.current) {
-      console.log("if is running");
       audioRef.current.pause();
       audioRef.current.load();
       audioRef.current.currentTime = 0;
@@ -95,8 +110,6 @@ function Player({ songUrl }) {
       setCurrentTime(0);
     }
   }, [songUrl]);
-
-  console.log("set is playing = ", isPlaying);
 
   const togglePlay = () => {
     if (isPlaying) {
@@ -116,8 +129,7 @@ function Player({ songUrl }) {
     if (audioRef !== null) {
       audioRef.current.play();
       setIsPlaying(true);
-    } else 
-    setIsPlaying(false);
+    } else setIsPlaying(false);
   };
 
   const handleVolumeChange = () => {
@@ -134,8 +146,34 @@ function Player({ songUrl }) {
     setVolume(value);
   };
 
+  const handleNext = () => {
+    if (songUrl.index + 1 < songs.data.getSongs.length)
+    {
+      setSongUrl((value) => ({
+        ...value,
+        index: songUrl.index + 1,
+        photo: songs.data.getSongs[songUrl.index + 1].photo,
+        url: songs.data.getSongs[songUrl.index + 1].url,
+      }));
+    }
+   
+  };
+
+  const handlePrev = () => {
+    if (songUrl.index >= 1) {
+      setSongUrl((value) => ({
+        ...value,
+        index: songUrl.index - 1,
+        photo: songs.data.getSongs[songUrl.index - 1].photo,
+        url: songs.data.getSongs[songUrl.index - 1].url,
+      }));
+    }
+  };
+
   return (
-    <Box flex={1} >
+    <Box flex={1}>
+      <button onClick={handleNext}>Next.js</button>
+      <button onClick={handlePrev}>Previous</button>
       <Card sx={{ margin: 5, background: "transparent" }}>
         <CardMedia
           component="img"
