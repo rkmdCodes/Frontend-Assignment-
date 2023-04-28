@@ -3,13 +3,14 @@ import { Box, styled, Typography } from "@mui/material";
 import { Avatar } from "@mui/material";
 import { useContext } from "react";
 import { DataContext } from "../contex/DataProvider";
-import { makeStyles } from '@mui/styles';
+import { makeStyles } from "@mui/styles";
 
 const useStyles = makeStyles((theme) => ({
   songItem: {
     "&:hover": {
-      background: "rgba(255, 255, 255, 0.5)",
-      opacity:"0.2",
+      background: "rgba(255, 255, 255, 0.06)",
+      transition: 'all 0.5s ease',
+      transform: "scaleX(1.02)",
     },
   },
 }));
@@ -25,8 +26,26 @@ const SongTitle = styled(Typography)`
   color: #ffffff;
 `;
 
-const Wrapper = styled(Box)`
+
+const SongItemWrapper = styled(Box)`
+  border-radius: 10px;
+  padding: 12px;
+  display: flex;
+  margin: 10px;
+  width: 80%;
  
+  animation-name: fadeIn;
+  animation-duration: 0.9s;
+  animation-fill-mode: forwards;
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
 `;
 
 const ArtistName = styled(Box)`
@@ -42,16 +61,25 @@ const ArtistName = styled(Box)`
 function formatDuration(durationInSeconds) {
   const minutes = Math.floor(durationInSeconds / 60);
   const seconds = durationInSeconds % 60;
-  return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+  return `${minutes}:${seconds.toString().padStart(2, "0")}`;
 }
 
-const SongItem = ({index, playlistId, details, setSongUrl}) => {
-  const classes = useStyles();  
- const {songContex}  = useContext(DataContext);
- const {setSongContex} = useContext(DataContext);
+const SongItem = ({ index, playlistId, details, setSongUrl }) => {
+  const classes = useStyles();
+  const { songContex } = useContext(DataContext);
+  const { setSongContex } = useContext(DataContext);
 
   return (
-    <Wrapper borderRadius="10px" padding="10px 10px 10px 10px"  className={classes.songItem} display="flex" mt="10px" ml="10px" width="80%">
+    <SongItemWrapper
+      borderRadius="10px"
+      padding="12px 12px 12px 12px"
+      className={classes.songItem}
+      display="flex"
+      mt="10px"
+      ml="10px"
+      width="80%"
+
+    >
       <Box display="flex" flex={1.2}>
         <Avatar
           alt="song pic"
@@ -66,15 +94,15 @@ const SongItem = ({index, playlistId, details, setSongUrl}) => {
           setSongContex({
             photo: details.photo,
             url: details.url,
-            index:index,
-            playlist:playlistId,
-            title:details.title,
-            artist:details.artist
+            index: index,
+            playlist: playlistId,
+            title: details.title,
+            artist: details.artist,
           })
         }
         sx={{ display: "flex", marginLeft: "10px" }}
       >
-        <Box >
+        <Box>
           <SongTitle>{details.title}</SongTitle>
           <ArtistName>{details.artist}</ArtistName>
         </Box>
@@ -85,7 +113,7 @@ const SongItem = ({index, playlistId, details, setSongUrl}) => {
           </Typography>
         </Box>
       </Box>
-    </Wrapper>
+    </SongItemWrapper>
   );
 };
 

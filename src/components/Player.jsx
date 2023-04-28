@@ -26,6 +26,7 @@ import FastRewindIcon from "@mui/icons-material/FastRewind";
 import VolumeDownIcon from "@mui/icons-material/VolumeDown";
 import PendingIcon from "@mui/icons-material/Pending";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
+
 const PlayPauseButton = styled(Button)({
   color: "#fff",
   marginTop: "20px",
@@ -34,6 +35,22 @@ const PlayPauseButton = styled(Button)({
     backgroundColor: "#c51162",
   },
 });
+
+const PhotoWrapper = styled(Box)`
+ 
+  animation-name: fadeIn;
+  animation-duration: 0.9s;
+  animation-fill-mode: forwards;
+  transition: 'all 0.5s ease',
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+`;
 
 const StyledControl = styled(Box)`
   border: 1px solid white;
@@ -193,9 +210,9 @@ function Player() {
       </Box>
         
         <Stack >
-          <Box paddingTop="20px" >
+          <PhotoWrapper paddingTop="20px" >
             <AlbumArt alignContent="center" src={songContex.photo} />
-          </Box>
+          </PhotoWrapper>
         </Stack>
         <Box  flex={2}>
           <CustomSlider
