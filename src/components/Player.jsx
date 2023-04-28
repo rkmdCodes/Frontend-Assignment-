@@ -11,7 +11,7 @@ import {
   CardActions,
   CardActionArea,
   CardContent,
-  Stack
+  Stack,
 } from "@mui/material";
 import { useQuery, gql } from "@apollo/client";
 import { useState, useRef } from "react";
@@ -19,9 +19,13 @@ import PlayCircleIcon from "@mui/icons-material/PlayCircle";
 import PauseCircleFilledIcon from "@mui/icons-material/PauseCircleFilled";
 import { useContext } from "react";
 import { DataContext } from "../contex/DataProvider";
-import {AlbumArt,Wrapper} from "./PlayerCSS";
+import { AlbumArt, Wrapper } from "./PlayerCSS";
 
-
+import FastForwardIcon from "@mui/icons-material/FastForward";
+import FastRewindIcon from "@mui/icons-material/FastRewind";
+import VolumeDownIcon from "@mui/icons-material/VolumeDown";
+import PendingIcon from "@mui/icons-material/Pending";
+import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 const PlayPauseButton = styled(Button)({
   color: "#fff",
   marginTop: "20px",
@@ -32,41 +36,43 @@ const PlayPauseButton = styled(Button)({
 });
 
 const StyledControl = styled(Box)`
-  border: 1px solid rgb(141, 141, 141);
+  border: 1px solid white;
   border-radius: 10px;
   color: rgb(218, 218, 218);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
   background-color: transparent;
 `;
 
 const SongName = styled(Typography)`
-  width: 184px;
-  height: 36px;
-  font-family: "Basier Circle";
+font-family: "Varela Round";
   font-style: normal;
   font-weight: 700;
   font-size: 32px;
-  line-height: 36px;
   color: #ffffff;
-  flex: none;
-  order: 0;
-  flex-grow: 0;
+`;
+
+const ArtistName = styled(Box)`
+  font-family: "Varela Round";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 24px;
+  color: #ffffff;
+  opacity: 0.6;
 `;
 
 const CustomSlider = styled(Slider)({
   color: "#ffffff",
+  alignItems:"center",
+  marks:"false",
   "& .MuiSlider-rail": {
-    height: 2,
+    height: 5,
   },
   "& .MuiSlider-track": {
-    height: 2,
+    height: 5,
   },
   "& .MuiSlider-thumb": {
-    width: 12,
-    height: 12,
+    width: 0,
+    height: 0,
     marginTop: -5,
     marginLeft: -6,
     "&:hover, &.Mui-focusVisible": {
@@ -84,9 +90,9 @@ function Player() {
   const [duration, setDuration] = useState(0);
   const [volume, setVolume] = useState(1);
   const audioRef = useRef(null);
- 
-  const {songContex } = useContext(DataContext);
-  const {setSongContex } = useContext(DataContext);
+
+  const { songContex } = useContext(DataContext);
+  const { setSongContex } = useContext(DataContext);
 
   const GET_SONGS = gql`
   query{
@@ -149,52 +155,141 @@ function Player() {
   };
 
   const handleNext = () => {
-    if (songUrl.index + 1 < songs.data.getSongs.length)
-    {
+    if (songContex.index + 1 < songs.data.getSongs.length) {
       setSongContex((value) => ({
         ...value,
-        index: songUrl.index + 1,
-        photo: songs.data.getSongs[songUrl.index + 1].photo,
-        url: songs.data.getSongs[songUrl.index + 1].url,
-        title:songs.data.getSongs[songUrl.index + 1].title
+        index: songContex.index + 1,
+        photo: songs.data.getSongs[songContex.index + 1].photo,
+        url: songs.data.getSongs[songContex.index + 1].url,
+        title: songs.data.getSongs[songContex.index + 1].title,
       }));
     }
-   
   };
 
   const handlePrev = () => {
-    if (songUrl.index >= 1) {
+    if (songContex.index >= 1) {
       setSongContex((value) => ({
         ...value,
-        index: songUrl.index - 1,
-        photo: songs.data.getSongs[songUrl.index - 1].photo,
-        url: songs.data.getSongs[songUrl.index - 1].url,
-        title:songs.data.getSongs[songUrl.index - 1].title
+        index: songContex.index - 1,
+        photo: songs.data.getSongs[songContex.index - 1].photo,
+        url: songs.data.getSongs[songContex.index - 1].url,
+        title: songs.data.getSongs[songContex.index - 1].title,
       }));
     }
   };
- 
 
-    return (
-      <Box flex={1} border="2px solid blue">  
-      <Stack direction="column" spacing={1} >
-        <Box  border="2px solid red" flex={8} >
-           <SongName>{songContex.title}</SongName>
-          <AlbumArt src={songContex.photo}/> 
+  return (
+    <Box
+      flex={1}
+      display="flex"
+      alignItems="center"
+      marginTop="20px" 
+      justifyContent="center"
+    >
+      <Stack direction="column" spacing={0}>
+      <Box >
+      <SongName>{songContex.title}</SongName>
+      <ArtistName>{songContex.artist}</ArtistName>
+      </Box>
+        
+        <Stack >
+          <Box paddingTop="20px" >
+            <AlbumArt alignContent="center" src={songContex.photo} />
+          </Box>
+        </Stack>
+        <Box  flex={2}>
+          <CustomSlider
+            marks={false}
+            value={currentTime}
+            min={0}
+            max={duration}
+            onChange={handleSeek}
+          />
+          <Stack direction="row" spacing={2} justifyContent="space-around">
+            <Box >
+              <RemoveCircleOutlineIcon
+                sx={{ fontSize: "30px", color: "white",paddingTop:"12px" }}
+              />
+            </Box>
+            <Stack
+              marginBottom="200px"
+            
+              direction="row"
+              spacing={3}
+              justifyContent="space-around"
+            >
+              <FastRewindIcon onClick={handlePrev} sx={{ fontSize: "30px", color: "white",opacity:"0.6" ,paddingTop:"12px"}} />
+              <Box>
+                {isPlaying ? (
+                  <PauseCircleFilledIcon
+                    sx={{
+                      fontSize: "60px",
+                      color: "white",
+                
+                    }}
+                    onClick={togglePlay}
+                  />
+                ) : (
+                  <PlayCircleIcon
+                    sx={{ fontSize: "60px", color: "white" }}
+                    onClick={togglePlay}
+                  />
+                )}
+              </Box>
+              <FastForwardIcon onClick={handleNext} sx={{ fontSize: "30px", color: "white",opacity:"0.6",paddingTop:"12px" }} />
+              {/* <StyledControl >
+           <Box
+             sx={{
+               display: "flex",
+               flexDirection: "",
+               justifyContent: "space-between",
+             }}
+           >
+             {isPlaying ? (
+               <PauseCircleFilledIcon
+                 sx={{ fontSize: "50px" }}
+                 onClick={togglePlay}
+               />
+             ) : (
+               <PlayCircleIcon
+                 sx={{ fontSize: "50px" }}
+                 onClick={togglePlay}
+               />
+             )}
+
+              <CustomSlider
+               value={volume}
+               min={0}
+               max={1}
+               step={0.01}
+               onChange={handleVolume}
+               sx={{ width: 100 }}
+             />
+             
+           </Box>
+         </StyledControl>
+        */}
+            </Stack>
+            <Box >
+              <VolumeDownIcon sx={{ fontSize: "30px", color: "white" ,paddingTop:"12px"}} />
+            </Box>
+          </Stack>
+          <audio
+            ref={audioRef}
+            src={songContex.url}
+            onTimeUpdate={handleTimeUpdate}
+            onVolumeChange={handleVolumeChange}
+          />
         </Box>
-        <Box border="2px solid green" flex={2}>
-        </Box>
-      </Stack>  
-  </Box>
-  
-    )
-  
+      </Stack>
+    </Box>
+  );
 
   // return (
   //   <Box flex={1}>
-  //     <button onClick={handleNext}>Next.js</button>
-  //     <button onClick={handlePrev}>Previous</button>
-      
+  //     <button >Next.js</button>
+  //     <button }>Previous</button>
+
   //     <Card sx={{ margin: 5, background: "transparent" }}>
   //       <CardMedia
   //         component="img"
@@ -204,50 +299,7 @@ function Player() {
   //       />
   //       <CardContent>
   //         <SongName>Player</SongName>
-  //         <audio
-  //           ref={audioRef}
-  //           src={songUrl.url}
-  //           onTimeUpdate={handleTimeUpdate}
-  //           onVolumeChange={handleVolumeChange}
-  //         />
 
-  //         <StyledControl>
-  //           <CustomSlider
-  //             value={currentTime}
-  //             min={0}
-  //             max={duration}
-  //             onChange={handleSeek}
-  //           />
-
-  //           <Box
-  //             sx={{
-  //               display: "flex",
-  //               flexDirection: "row",
-  //               justifyContent: "space-between",
-  //             }}
-  //           >
-  //             {isPlaying ? (
-  //               <PauseCircleFilledIcon
-  //                 sx={{ fontSize: "50px" }}
-  //                 onClick={togglePlay}
-  //               />
-  //             ) : (
-  //               <PlayCircleIcon
-  //                 sx={{ fontSize: "50px" }}
-  //                 onClick={togglePlay}
-  //               />
-  //             )}
-
-  //             <CustomSlider
-  //               value={volume}
-  //               min={0}
-  //               max={1}
-  //               step={0.01}
-  //               onChange={handleVolume}
-  //               sx={{ width: 100 }}
-  //             />
-  //           </Box>
-  //         </StyledControl>
   //       </CardContent>
   //       <CardActions disableSpacing></CardActions>
   //     </Card>

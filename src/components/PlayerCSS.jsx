@@ -1,11 +1,14 @@
-import {styled} from "@mui/material";
+import {styled,Container} from "@mui/material";
 
 export const AlbumArt = styled("img")({
     'height':"100%",
     'width':"100%",
      'max-height':"400px",
+     'min-height':"400px",
      'max-width':"400px",
-     'border-radius':"10px"
+     'min-width':'400px',
+     'border-radius':"10px",
+     
   });
   
 export const Wrapper = styled(Container)(({ theme }) => ({

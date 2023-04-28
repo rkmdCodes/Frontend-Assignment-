@@ -3,9 +3,13 @@ import { makeStyles } from '@mui/styles';
 import { Box, Typography, styled, Stack } from "@mui/material";
 import { useQuery, gql } from "@apollo/client";
 import SongItem from "./SongItem";
-const Wrapper = styled(Box)`
-  'margin-left':'10px';
-  
+
+const StyledStack = styled(Stack)`
+  "::hover": {
+    backgroundColor: "#fff",
+  },
+
+}
 `;
 
 const useStyles = makeStyles({
@@ -20,17 +24,26 @@ const useStyles = makeStyles({
 const StyledInput = styled("input")({
   "margin-left": "32px",
   "margin-top": "36px",
-  width: "65%",
-  height: "8%",
-  background: "transparent",
-  "border-radius": "5px",
+  width: "78%",
+  height: "6%",
+  background: "rgba(255, 255, 255, 0.08)",
+  "opacity":"0.2",
+  "border-radius": "10px",
   color: "#ffffff",
-  "backdrop-filter": "blur(200px)"
+  "backdrop-filter": "blur(200px)",
+   "input:focus":{
+    outline: 'none'
+  },
+  "::placeholder":{
+    "margin-left":"10px",
+    "color": "white",
+    "font-family":"Varela Round",
+    "opacity":"1.0",
+    "font-size":"20px",
+  }
 });
 
 const StyledName = styled(Typography)`
-  margin-top: "32px";
-  margin-left: "32px";
   width: auto;
   height: 36px;
   font-family: "Varela Round";
@@ -65,7 +78,7 @@ const Tabs = ({ playlist, setSongUrl }) => {
   });
 
   return (
-    <Wrapper flex={5} sx={{paddingLeft:"32px"}}>
+    <Box flex={7} sx={{paddingLeft:"32px"}}>
       <StyledName mt="30px" ml="32px">
         {playlistName}
       </StyledName>
@@ -73,12 +86,11 @@ const Tabs = ({ playlist, setSongUrl }) => {
         fontFamily="Varela Round"
         color="white"
         type="search"
-        placeholder="Search..."
+        placeholder="Search Songs"
         value={search}
         onChange={(event) => setSearchString(event.target.value)}
       />
-
-      <Stack
+      <StyledStack
         direction="column"
         alignItems="left"
         marginLeft="32px"
@@ -88,14 +100,15 @@ const Tabs = ({ playlist, setSongUrl }) => {
         style={{
           height: "570px",
           overflow: "auto",
+          
         }}
       >
         {!songs.loading &&
           songs.data.getSongs.map((song,index) => (
             <SongItem  key={index} playlistId={playlistId} index={index}  details={song} />
           ))}
-      </Stack>
-    </Wrapper>
+      </StyledStack>
+    </Box>
   );
 };
 

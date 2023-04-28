@@ -41,7 +41,7 @@ const Sidebar = ({setClickedPlaylist}) => {
   return (
     <Box>
      <Logo src={LogoPng} />
-      <Wrapper mt="28px" gap="10px" marginLeft="32px" flex={4}>
+      <Wrapper mt="28px" gap="10px" marginLeft="32px" flex={3}>
       
        { !playlists.loading &&
           playlists.data.getPlaylists.map((playlist) => (

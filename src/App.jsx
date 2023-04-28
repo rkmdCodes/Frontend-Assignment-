@@ -33,7 +33,7 @@ const App = () => {
     ),
     url(${songContex.photo});
     background-size: cover;
-    
+    transition: 'background-image 0.5s ease-in-out';
   `}}>
     <BlurBox height="100vh" >
     <Stack direction="row" spacing={0} justifyItems="center" >

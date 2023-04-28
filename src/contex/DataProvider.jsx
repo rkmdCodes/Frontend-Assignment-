@@ -8,8 +8,9 @@ const DataProvider = ({children})=>{
         photo: "https://images.genius.com/e95f361c27487088fd9dddf8c967bf89.500x500x1.jpg",
         url: "https://storage.googleapis.com/similar_sentences/Imagine%20Dragons%20-%20West%20Coast%20(Pendona.com).mp3",
         index:0,
+        artist:"Artist",
         playlist:1,
-        title:""
+        title:"Player"
       });
 
     return (
