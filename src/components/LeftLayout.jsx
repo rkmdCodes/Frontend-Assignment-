@@ -9,7 +9,7 @@ const LeftLayout = ({setSongUrl}) => {
     name: "For You",
   });
   return (
-      <Box  flex={1} sx={{display:{xs:"none",sm:"block",md:"block",lg:"block"}}}>
+      <Box  flex={1} sx={{display:{xs:"none",sm:"none",md:"block",lg:"block"}}}>
       <Stack
         maxHeight="100vh"
         direction="row"

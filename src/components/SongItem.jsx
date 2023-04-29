@@ -9,14 +9,13 @@ const useStyles = makeStyles((theme) => ({
   songItem: {
     "&:hover": {
       background: "rgba(255, 255, 255, 0.06)",
-      transition: 'all 0.5s ease',
+      transition: "all 0.5s ease",
       transform: "scaleX(1.02)",
     },
   },
 }));
 
 const SongTitle = styled(Typography)`
-
   font-family: "Varela Round";
   font-style: normal;
   font-weight: 400;
@@ -25,14 +24,13 @@ const SongTitle = styled(Typography)`
   color: #ffffff;
 `;
 
-
 const SongItemWrapper = styled(Box)`
   border-radius: 10px;
   padding: 12px;
   display: flex;
   margin: 10px;
   width: 80%;
- 
+
   animation-name: fadeIn;
   animation-duration: 0.9s;
   animation-fill-mode: forwards;
@@ -63,13 +61,23 @@ function formatDuration(durationInSeconds) {
   return `${minutes}:${seconds.toString().padStart(2, "0")}`;
 }
 
-const SongItem = ({ index, playlistId, details, setSongUrl }) => {
+const SongItem = ({ index, playlistId, details }) => {
   const classes = useStyles();
+
   const { songContex } = useContext(DataContext);
   const { setSongContex } = useContext(DataContext);
-
+  const styleCurrent = {
+    background: "",
+    transition: "",
+  };
+  console.log(songContex.id);
+  if (details._id === songContex.id) {
+    styleCurrent.background = "rgba(255, 255, 255, 0.2)";
+    styleCurrent.transition = "all 0.5s ease";
+  }
   return (
     <SongItemWrapper
+    style={styleCurrent}
       borderRadius="10px"
       padding="12px 12px 12px 12px"
       className={classes.songItem}
@@ -77,7 +85,6 @@ const SongItem = ({ index, playlistId, details, setSongUrl }) => {
       mt="10px"
       ml="10px"
       width="80%"
-
     >
       <Box display="flex" flex={1.2}>
         <Avatar
@@ -97,6 +104,7 @@ const SongItem = ({ index, playlistId, details, setSongUrl }) => {
             playlist: playlistId,
             title: details.title,
             artist: details.artist,
+            id:details._id
           })
         }
         sx={{ display: "flex", marginLeft: "10px" }}

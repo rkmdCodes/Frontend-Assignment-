@@ -40,15 +40,32 @@ const GET_PLAYLISTS = gql`
 const Sidebar = () => {
   const playlists = useQuery(GET_PLAYLISTS);
   const { setClickedPlaylist } = useContext(DataContext);
+  const { clickedPlaylist } = useContext(DataContext);
+  const {playlistList}  = useContext(DataContext);
+  const {setPlaylistList}  = useContext(DataContext);
+   if(!playlists.loading && playlistList.length === 0)
+      setPlaylistList([...playlists.data.getPlaylists]);
+  console.log(playlistList);
+  const styleCurrent = {
+    opacity: "0.4",
+  };
+ 
   return (
-    <Box>
+    <Box sx={{display:{xs:"none",sm:"none",md:"block",lg:"block"}}}>
      <Logo src={LogoPng} />
       <Wrapper mt="28px" gap="10px" marginLeft="32px" flex={3}>
-      
+       
        { !playlists.loading &&
-          playlists.data.getPlaylists.map((playlist) => (
-            <PlaylistName onClick={()=>setClickedPlaylist({id:playlist.id,name:playlist.title})} key={playlist.id}>{playlist.title}</PlaylistName>
-          ))}
+          playlists.data.getPlaylists.map((playlist,index) => {
+            {
+            
+             if(playlist.id === clickedPlaylist.id)
+             {
+              return <PlaylistName style={{opacity:"0.8"}} onClick={()=>setClickedPlaylist({id:playlist.id,name:playlist.title})} key={playlist.id}>{playlist.title}</PlaylistName>
+              }
+            }
+            return <PlaylistName style={styleCurrent} onClick={()=>setClickedPlaylist({id:playlist.id,name:playlist.title})} key={playlist.id}>{playlist.title}</PlaylistName>
+       })}
 
       </Wrapper>
       </Box>

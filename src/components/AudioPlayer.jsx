@@ -10,7 +10,7 @@ import FastRewindIcon from "@mui/icons-material/FastRewind";
 import VolumeDownIcon from "@mui/icons-material/VolumeDown";
 import PendingIcon from "@mui/icons-material/Pending";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
-import { Box, styled, Button, Slider, Typography, Stack } from "@mui/material";
+import { Box, styled, Button, Slider, Tooltip, Stack } from "@mui/material";
 
 const PlayPauseButton = styled(Button)({
   color: "#fff",
@@ -52,7 +52,7 @@ const AudioPlayer = () => {
   const [duration, setDuration] = useState(0);
   const [volume, setVolume] = useState(1);
   const audioRef = useRef(null);
-
+  const [openVolume, setOpenVolume] = useState(false);
   const { songContex } = useContext(DataContext);
   const { setSongContex } = useContext(DataContext);
 
@@ -64,6 +64,7 @@ const AudioPlayer = () => {
       duration,
       artist,
       url,
+      _id,
     }
   }`;
 
@@ -124,6 +125,7 @@ const AudioPlayer = () => {
         photo: songs.data.getSongs[songContex.index + 1].photo,
         url: songs.data.getSongs[songContex.index + 1].url,
         title: songs.data.getSongs[songContex.index + 1].title,
+        id:songs.data.getSongs[songContex.index + 1]._id
       }));
     }
   };
@@ -136,12 +138,15 @@ const AudioPlayer = () => {
         photo: songs.data.getSongs[songContex.index - 1].photo,
         url: songs.data.getSongs[songContex.index - 1].url,
         title: songs.data.getSongs[songContex.index - 1].title,
+        id:songs.data.getSongs[songContex.index - 1]._id
       }));
     }
+    
   };
 
   return (
-    <Box >
+    <Box>
+    
       <CustomSlider
         marks={false}
         value={currentTime}
@@ -149,7 +154,9 @@ const AudioPlayer = () => {
         max={duration}
         onChange={handleSeek}
       />
-      <Stack   direction="row" spacing={2} justifyContent="space-around">
+   
+      
+      <Stack direction="row" spacing={2} justifyContent="space-around">
         <Box>
           <RemoveCircleOutlineIcon
             sx={{ fontSize: "30px", color: "white", paddingTop: "12px" }}
@@ -197,18 +204,57 @@ const AudioPlayer = () => {
           />
          
         </Stack>
+    
         <Box>
-        <VolumeDownIcon
-          sx={{ fontSize: "30px", color: "white", paddingTop: "12px" }}
-        />
-      </Box>
+        
+        <Tooltip
+      
+        sx={{
+          arrow: {
+            borderRadius: '10px',
+          },
+        }}
+        PopperProps={{
+          disablePortal: true,
+        }}
+        onClose={() => setOpenVolume(false)}
+        open={openVolume}
+        disableFocusListener
+        disableHoverListener
+        disableTouchListener
+        title={
+          <div
+            style={{
+              width: 100,
+              borderRadius:"50px"
+             
+            }}
+          >
+          <CustomSlider
+          value={volume}
+            min={0}
+           max={1}
+           step={0.01}
+           onChange={handleVolume}
+           sx={{ width: 100 }}
+         />
+          </div>
+        }
+      >
+        <Box onClick={() => setOpenVolume(!openVolume)}>
+          <VolumeDownIcon  sx={{ fontSize: "30px", color: "white", paddingTop: "12px" }}/>
+        </Box>
+      </Tooltip>
+        </Box>
       </Stack>
+ 
       <audio
-      ref={audioRef}
-      src={songContex.url}
-      onTimeUpdate={handleTimeUpdate}
-      onVolumeChange={handleVolumeChange}
-    />
+        ref={audioRef}
+        src={songContex.url}
+        onTimeUpdate={handleTimeUpdate}
+        onVolumeChange={handleVolumeChange}
+      />
+   
     </Box>
   );
 };

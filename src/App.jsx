@@ -8,20 +8,12 @@ import AudioPlayer from "./components/AudioPlayer";
 
 const BlurBox = styled(Box)`
   backdrop-filter: blur(100px);
+  background-size:cover;
 `;
 
-const MobileView = styled(Box)(({ theme }) => ({
-  display: "none",
-  [theme.breakpoints.down("sm")]: {
-    display: "flex",
-  },
-}));
 
 const DesktopView = styled(Box)(({ theme }) => ({
-  display: "block",
-  [theme.breakpoints.down("sm")]: {
-    display: "none",
-  },
+
 }));
 
 const App = () => {
@@ -29,9 +21,9 @@ const App = () => {
 
  
   return (
-    <>
+    
       <DesktopView
-      
+     
         height="100vh"
         sx={{
           backgroundImage: `linear-gradient(
@@ -45,36 +37,14 @@ const App = () => {
   `,
         }}
       >
-        <BlurBox height="inherit">
+        <BlurBox  height="inherit">
           <Stack height="inherit" direction="row" spacing={0} justifyItems="center">
             <LeftLayout />
             <Player />
           </Stack>
         </BlurBox>
       </DesktopView>
-      <MobileView
-      height="100vh"
-        sx={{
-          backgroundImage: `linear-gradient(
-    to right,
-    rgba(0, 0, 0, 0.6),
-    rgba(0, 0, 0, 0.9)
-  ),
-  url(${songContex.photo});
-  background-size: cover;
-  transition: 'background-image 0.5s ease-in-out';
 
-`,
-        }}
-      >
-        <BlurBox height="inherit">
-          <Stack height="inherit" direction="column" spacing={0} justifyItems="center">
-            <Tabs />
-            <AudioPlayer bgColor="black" />
-          </Stack>
-        </BlurBox>
-      </MobileView>
-    </>
   );
 };
 

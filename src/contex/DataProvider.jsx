@@ -10,16 +10,17 @@ const DataProvider = ({children})=>{
         index:0,
         artist:"Artist",
         playlist:1,
-        title:"Player"
+        title:"Player",
+        id:"",
       });
-
+     const [playlistList,setPlaylistList] = useState([]);
       const [clickedPlaylist, setClickedPlaylist] = useState({
-        id: "1",
+        id: 1,
         name: "For You",
       });
 
     return (
-        <DataContext.Provider value = {{songContex,setSongContex,clickedPlaylist,setClickedPlaylist }} >
+        <DataContext.Provider value = {{songContex,setSongContex,clickedPlaylist,setClickedPlaylist,playlistList,setPlaylistList }} >
            {children}
         </DataContext.Provider>
     )

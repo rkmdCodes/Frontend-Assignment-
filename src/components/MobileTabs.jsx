@@ -5,6 +5,8 @@ import { useQuery, gql } from "@apollo/client";
 import SongItem from "./SongItem";
 import { useContext } from "react";
 import { DataContext } from "../contex/DataProvider";
+import Next from "../assets/Next.png";
+import Prev from "../assets/Prev.png";
 
 const StyledStack = styled(Stack)`
   "::hover": {
@@ -31,16 +33,17 @@ const useStyles = makeStyles({
 });
 
 const StyledInput = styled("input")({
-  "margin-left": "32px",
   "margin-top": "36px",
-  width: "78%",
-  height: "6%",
+  "margin-left": "56px",
+  "margin-left": "56px",
+  width: "82%",
+  height: "3rem",
   background: "rgba(255, 255, 255, 0.06)",
   "border-radius": "10px",
   color: "#ffffff",
   "font-family": "Varela Round",
   "font-size": "20px",
-  "padding-left": "20px",
+   alignItems:"center",
   "padding-top": "2px",
   "::placeholder": {
     "padding-top": "2px",
@@ -51,10 +54,15 @@ const StyledInput = styled("input")({
   },
   outline: "none",
   border: "none",
-  "box-sizing": "border-box",
+  
+});
+
+const Logo = styled("img")({
+  "margin-top":"32px",
 });
 
 const StyledName = styled(Typography)`
+
   width: auto;
   height: 36px;
   font-family: "Varela Round";
@@ -64,13 +72,27 @@ const StyledName = styled(Typography)`
   border: "0px";
 `;
 
-const Tabs = () => {
+
+
+const MobileTabs = () => {
   const classes = useStyles();
   const { clickedPlaylist } = useContext(DataContext);
-  const {songContex} = useContext(DataContext);
+  const {  setClickedPlaylist } = useContext(DataContext);
   const [search, setSearchString] = useState("");
   const playlistId = clickedPlaylist.id;
   const playlistName = clickedPlaylist.name;
+  const {playlistList} = useContext(DataContext);
+  
+  const handleNext = ()=>{
+   if(clickedPlaylist.id < playlistList.length)
+    setClickedPlaylist({...clickedPlaylist,id:clickedPlaylist.id+1});
+  }
+
+  const handlePrev = ()=>{
+    if(clickedPlaylist.id >= 2)
+     setClickedPlaylist({...clickedPlaylist,id:clickedPlaylist.id-1});
+  }
+  
 
   const GET_SONGS = gql`
   query{
@@ -84,12 +106,15 @@ const Tabs = () => {
     }
   }`;
 
+
   const songs = useQuery(GET_SONGS, {
     variables: { playlistId: 1, search: "" },
   });
 
+  
+
   return (
-    <Box 
+    <Box maxHeight="70vh" 
       sx={{
         display: {
           xs: "block",
@@ -97,39 +122,46 @@ const Tabs = () => {
           md: "block",
           lg: "block",
         },
-        paddingLeft: "32px",
-        overflow: "clip",
+        
+        overflow:"clip",
       }}
-      flex={7}
+      
     >
-      <StyledName mt="30px" ml="32px">
-        {playlistName}
-      </StyledName>
+    <Stack direction="row" justifyContent="space-between" spacing={0}>
+    <Box onClick={handlePrev}><Logo src={Prev}/></Box>
+      <Box>
+        <StyledName mt="15px" alignItem="flex-start">
+          { playlistList.length ? playlistList[clickedPlaylist.id-1].title : "Loading..."}
+        </StyledName>
+      </Box>      
+      <Box onClick={handleNext} ><Logo src={Next}/></Box>
+    </Stack>
+  
       <StyledInput
         fontFamily="Varela Round"
         color="white"
         type="search"
+        
         placeholder="Search Songs"
         value={search}
         onChange={(event) => setSearchString(event.target.value)}
       />
       <Box sx={{ overflow: "clip" }}>
-        <Box  >
+        <Box   >
           <StyledStack
             direction="column"
             alignItems="left"
-            marginLeft="20px"
             marginTop="22px"
             gap="5px"
             className={classes.root}
             style={{
-              overflow: "auto",
-              maxHeight: "100vh",
+                overflow: "auto",
+                maxHeight: "100vh",
+              
             }}
           >
             {!songs.loading &&
               songs.data.getSongs.map((song, index) => (
-                
                 <SongItem
                   key={index}
                   playlistId={playlistId}
@@ -203,9 +235,9 @@ const Tabs = () => {
             )}
           </StyledStack>
         </Box>
-      </Box>
+        </Box>
     </Box>
   );
 };
 
-export default Tabs;
+export default MobileTabs;
