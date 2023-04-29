@@ -16,8 +16,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const SongTitle = styled(Typography)`
-  width: auto;
-  height: auto;
+
   font-family: "Varela Round";
   font-style: normal;
   font-weight: 400;

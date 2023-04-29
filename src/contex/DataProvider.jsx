@@ -13,8 +13,13 @@ const DataProvider = ({children})=>{
         title:"Player"
       });
 
+      const [clickedPlaylist, setClickedPlaylist] = useState({
+        id: "1",
+        name: "For You",
+      });
+
     return (
-        <DataContext.Provider value = {{songContex,setSongContex }} >
+        <DataContext.Provider value = {{songContex,setSongContex,clickedPlaylist,setClickedPlaylist }} >
            {children}
         </DataContext.Provider>
     )

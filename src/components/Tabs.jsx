@@ -3,6 +3,8 @@ import { makeStyles } from "@mui/styles";
 import { Box, Typography, styled, Stack, Skeleton } from "@mui/material";
 import { useQuery, gql } from "@apollo/client";
 import SongItem from "./SongItem";
+import { useContext } from "react";
+import { DataContext } from "../contex/DataProvider";
 
 const StyledStack = styled(Stack)`
   "::hover": {
@@ -62,11 +64,12 @@ const StyledName = styled(Typography)`
   border: "0px";
 `;
 
-const Tabs = ({ playlist, setSongUrl }) => {
+const Tabs = () => {
   const classes = useStyles();
+  const { clickedPlaylist } = useContext(DataContext);
   const [search, setSearchString] = useState("");
-  const playlistId = playlist.id;
-  const playlistName = playlist.name;
+  const playlistId = clickedPlaylist.id;
+  const playlistName = clickedPlaylist.name;
 
   const GET_SONGS = gql`
   query{
@@ -84,7 +87,7 @@ const Tabs = ({ playlist, setSongUrl }) => {
   });
 
   return (
-    <Box flex={7} sx={{ paddingLeft: "32px" }}>
+    <Box flex={7} sx={{ paddingLeft: "32px", overflow: "clip" }}>
       <StyledName mt="30px" ml="32px">
         {playlistName}
       </StyledName>
@@ -96,92 +99,97 @@ const Tabs = ({ playlist, setSongUrl }) => {
         value={search}
         onChange={(event) => setSearchString(event.target.value)}
       />
-      <StyledStack
-        direction="column"
-        alignItems="left"
-        marginLeft="20px"
-        marginTop="22px"
-        gap="5px"
-        className={classes.root}
-        style={{
-          height: "570px",
-          overflow: "auto",
-        }}
-      >
-        {!songs.loading &&
-          songs.data.getSongs.map((song, index) => (
-            <SongItem
-              key={index}
-              playlistId={playlistId}
-              index={index}
-              details={song}
-            />
-          ))}
-        {songs.loading && (
-          <Stack direction="column">
-            <Loading
-              sx={{
-                bgcolor: "grey.999",
-                borderRadius: "10px",
-                mt: "0px",
-                ml: "10px",
-                width: "80%",
-              }}
-              animation="wave"
-              variant="text"
-              height={120}
-            />
-            <Loading
-              sx={{
-                bgcolor: "grey.999",
-                borderRadius: "10px",
-                mt: "0px",
-                ml: "10px",
-                width: "80%",
-              }}
-              animation="wave"
-              variant="text"
-              height={120}
-            />
-            <Loading
-              sx={{
-                bgcolor: "grey.999",
-                borderRadius: "10px",
-                mt: "0px",
-                ml: "10px",
-                width: "80%",
-              }}
-              animation="wave"
-              variant="text"
-              height={120}
-            />
-            <Loading
-              sx={{
-                bgcolor: "grey.999",
-                borderRadius: "10px",
-                mt: "0px",
-                ml: "10px",
-                width: "80%",
-              }}
-              animation="wave"
-              variant="text"
-              height={120}
-            />
-            <Loading
-              sx={{
-                bgcolor: "grey.999",
-                borderRadius: "10px",
-                mt: "0px",
-                ml: "10px",
-                width: "80%",
-              }}
-              animation="wave"
-              variant="text"
-              height={120}
-            />
-          </Stack>
-        )}
-      </StyledStack>
+      <Box  sx={{ overflow: "clip" }}>
+        <Box>
+          <StyledStack
+        
+            direction="column"
+            alignItems="left"
+            marginLeft="20px"
+            marginTop="22px"
+            gap="5px"
+            className={classes.root}
+            style={{
+              overflow: "auto",
+              maxHeight: "100vh",
+            }}
+          >
+            {!songs.loading &&
+              songs.data.getSongs.map((song, index) => (
+                <SongItem
+                  key={index}
+                  playlistId={playlistId}
+                  index={index}
+                  details={song}
+                />
+              ))}
+            {songs.loading && (
+              <Stack direction="column">
+                <Loading
+                  sx={{
+                    bgcolor: "grey.999",
+                    borderRadius: "10px",
+                    mt: "0px",
+                    ml: "10px",
+                    width: "80%",
+                  }}
+                  animation="wave"
+                  variant="text"
+                  height={120}
+                />
+                <Loading
+                  sx={{
+                    bgcolor: "grey.999",
+                    borderRadius: "10px",
+                    mt: "0px",
+                    ml: "10px",
+                    width: "80%",
+                  }}
+                  animation="wave"
+                  variant="text"
+                  height={120}
+                />
+                <Loading
+                  sx={{
+                    bgcolor: "grey.999",
+                    borderRadius: "10px",
+                    mt: "0px",
+                    ml: "10px",
+                    width: "80%",
+                  }}
+                  animation="wave"
+                  variant="text"
+                  height={120}
+                />
+                <Loading
+                  sx={{
+                    bgcolor: "grey.999",
+                    borderRadius: "10px",
+                    mt: "0px",
+                    ml: "10px",
+                    width: "80%",
+                  }}
+                  animation="wave"
+                  variant="text"
+                  height={120}
+                />
+                <Loading
+                  sx={{
+                    bgcolor: "grey.999",
+                    borderRadius: "10px",
+                    mt: "0px",
+                    ml: "10px",
+                    width: "80%",
+                  }}
+                  animation="wave"
+                  variant="text"
+                  height={120}
+                />
+              </Stack>
+            )}
+          </StyledStack>
+        </Box>
+      </Box>
     </Box>
   );
 };

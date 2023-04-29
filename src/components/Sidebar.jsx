@@ -3,6 +3,8 @@ import { Box, Typography,Button ,styled } from "@mui/material";
 import LogoPng from "../assets/Vector.png";
 import { useQuery, gql } from "@apollo/client";
 import Tabs from "../components/Tabs";
+import { useContext } from "react";
+import { DataContext } from "../contex/DataProvider";
 
 const Wrapper = styled(Box)`
   mt:'32px';
@@ -35,9 +37,9 @@ const GET_PLAYLISTS = gql`
   }
 `;
 
-const Sidebar = ({setClickedPlaylist}) => {
+const Sidebar = () => {
   const playlists = useQuery(GET_PLAYLISTS);
-
+  const { setClickedPlaylist } = useContext(DataContext);
   return (
     <Box>
      <Logo src={LogoPng} />

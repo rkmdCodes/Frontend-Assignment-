@@ -9,16 +9,18 @@ const LeftLayout = ({setSongUrl}) => {
     name: "For You",
   });
   return (
-    <Box flex={1} sx={{display:{xs:"none",sm:"block",md:"block"}}}>
+      <Box  flex={1} sx={{display:{xs:"none",sm:"block",md:"block",lg:"block"}}}>
       <Stack
+        maxHeight="100vh"
         direction="row"
         spacing={5}
         justifyContent="space-between"
       >
-        <Sidebar setClickedPlaylist={setClickedPlaylist} />
-        <Tabs   playlist={clickedPlaylist} search="Star" />
+        <Sidebar />
+        <Tabs  />
       </Stack>
     </Box>
+    
   );
 };
 
