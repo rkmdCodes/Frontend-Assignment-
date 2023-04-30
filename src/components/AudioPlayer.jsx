@@ -1,7 +1,7 @@
 import React, { useEffect , useContext,useState, useRef} from "react";
 import { useQuery} from "@apollo/client";
 import { DataContext } from "../contex/DataProvider";
-import { Box,Tooltip, Stack } from "@mui/material";
+import { Box,Tooltip,styled,Slider, Stack } from "@mui/material";
 import { GET_SONGS } from "../graphQl/query";
 import { CustomSlider } from "../Styles/AudioPlayerStyles";
 import FastForwardIcon from "@mui/icons-material/FastForward";
@@ -100,7 +100,7 @@ const AudioPlayer = () => {
   };
 
   return (
-    <Box>
+    <Box marginBottom="10px">
     
       <CustomSlider
         marks={false}
@@ -163,11 +163,12 @@ const AudioPlayer = () => {
         <Box>
         
         <Tooltip
-      
+          
         sx={{
           arrow: {
-            borderRadius: '10px',
+            borderRadius: '2px',
           },
+          height:30,
         }}
         PopperProps={{
           disablePortal: true,
@@ -180,18 +181,20 @@ const AudioPlayer = () => {
         title={
           <div
             style={{
-              width: 100,
-              borderRadius:"50px"
+              width: 80,
+             
+              borderRadius:"50px",
              
             }}
           >
           <CustomSlider
-          value={volume}
+            value={volume}
             min={0}
-           max={1}
+            max={1}
+            
            step={0.01}
            onChange={handleVolume}
-           sx={{ width: 100 }}
+           sx={{ width: 80}}
          />
           </div>
         }

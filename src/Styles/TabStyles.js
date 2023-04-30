@@ -12,6 +12,11 @@ ml="10px";
 width="80%";
 `;
 
+export const Logo = styled("img")({
+  "margin-top":"32px",
+});
+
+
 export const StyledInput = styled("input")({
   "margin-left": "32px",
   "margin-top": "36px",

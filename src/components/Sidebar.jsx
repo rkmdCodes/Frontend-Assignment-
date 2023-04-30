@@ -1,11 +1,13 @@
 import React, { useContext } from "react";
-import { Box } from "@mui/material";
+import { Box , Stack} from "@mui/material";
 import LogoPng from "../assets/Vector.png";
 import { useQuery } from "@apollo/client";
 import { DataContext } from "../contex/DataProvider";
 import { GET_PLAYLISTS } from "../graphQl/query";
+
 import AvtarImage from "../assets/Profile.png";
 import { Wrapper, Logo, PlaylistName } from "../Styles/SidebarStyles";
+import { Loading } from "../Styles/TabStyles";
 
 const Sidebar = () => {
   const playlists = useQuery(GET_PLAYLISTS);
@@ -15,7 +17,6 @@ const Sidebar = () => {
   const { setPlaylistList } = useContext(DataContext);
   if (!playlists.loading && playlistList.length === 0)
     setPlaylistList([...playlists.data.getPlaylists]);
-  console.log(playlistList);
   const styleCurrent = {
     opacity: "0.4",
   };
@@ -57,9 +58,54 @@ const Sidebar = () => {
             );
           })}
       </Wrapper>
-      <Box ml="2rem" mt="20rem">
-        <img src={AvtarImage} />
-      </Box>
+      {playlists.loading && (
+        <Stack direction="column">
+          <Loading
+            sx={{
+             
+              bgcolor: "black.999",
+              borderRadius: "10px",
+              mt: "0px",
+              ml: "20px",
+              width: "100%",
+            }}
+            animation="wave"
+            variant="text"
+            height={80}
+          />
+          <Loading
+            sx={{
+             
+              bgcolor: "black.999",
+              borderRadius: "10px",
+              mt: "0px",
+              ml: "20px",
+              width: "100%",
+            }}
+            animation="wave"
+            variant="text"
+            height={80}
+          />
+          <Loading
+            sx={{
+             
+              bgcolor: "black.999",
+              borderRadius: "10px",
+              mt: "0px",
+              ml: "20px",
+              width: "100%",
+            }}
+            animation="wave"
+            variant="text"
+            height={80}
+          />
+        </Stack>
+      )}
+      {!playlists.loading && (
+        <Box ml="2rem" mt="23rem">
+          <img  src={AvtarImage} />
+        </Box>
+      )}
     </Box>
   );
 };

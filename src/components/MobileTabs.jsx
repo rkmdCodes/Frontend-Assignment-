@@ -5,7 +5,7 @@ import { useQuery, gql } from "@apollo/client";
 import SongItem from "./SongItem";
 import { useContext } from "react";
 import { DataContext } from "../contex/DataProvider";
-import { GET_SONGS_SEARCH } from "../graphQl/query";
+import { GET_SONGS_SEARCH } from "../graphQL/query";
 import Next from "../assets/Next.png";
 import Prev from "../assets/Prev.png";
 import {
@@ -13,6 +13,7 @@ import {
   StyledInput,
   StyledStack,
   StyledName,
+  Logo
 } from "../Styles/TabStyles";
 
 const useStyles = makeStyles({
@@ -50,12 +51,18 @@ const MobileTabs = () => {
     <Box
       maxHeight="70vh"
       sx={{
+        display: {
+          xs: "block",
+          sm: "block",
+          md: "block",
+          lg: "block",
+        },
         overflow: "clip",
       }}
     >
       <Stack direction="row" justifyContent="space-between" spacing={0}>
         <Box onClick={handlePrev}>
-          <img marginTop="32px" src={Prev} />
+          <Logo paddingTop="32px" src={Prev} />
         </Box>
         <Box>
           <StyledName mt="15px" alignItem="flex-start">
@@ -65,7 +72,7 @@ const MobileTabs = () => {
           </StyledName>
         </Box>
         <Box onClick={handleNext}>
-          <img marginTop="32px" src={Next} />
+          <Logo marginTop="32px" src={Next} />
         </Box>
       </Stack>
 

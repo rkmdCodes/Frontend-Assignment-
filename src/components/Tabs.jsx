@@ -4,7 +4,7 @@ import { Box,styled, Stack , Typography} from "@mui/material";
 import { useQuery} from "@apollo/client";
 import SongItem from "./SongItem";
 import { DataContext } from "../contex/DataProvider";
-import { GET_SONGS_SEARCH } from "../graphQl/query";
+import { GET_SONGS_SEARCH } from "../graphQL/query";
 import { Loading, StyledInput , StyledName} from "../Styles/TabStyles";
 
 const StyledStack = styled(Stack)`
