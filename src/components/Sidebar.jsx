@@ -99,12 +99,9 @@ const Sidebar = () => {
             variant="text"
             height={80}
           />
+          
         </Stack>
-      )}
-      {!playlists.loading && (
-        <Box ml="2rem" mt="23rem">
-          <img  src={AvtarImage} />
-        </Box>
+       
       )}
     </Box>
   );
