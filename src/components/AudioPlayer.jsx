@@ -1,53 +1,19 @@
-import React, { useEffect } from "react";
-import { useQuery, gql } from "@apollo/client";
-import { useState, useRef } from "react";
-import PlayCircleIcon from "@mui/icons-material/PlayCircle";
-import PauseCircleFilledIcon from "@mui/icons-material/PauseCircleFilled";
-import { useContext } from "react";
+import React, { useEffect , useContext,useState, useRef} from "react";
+import { useQuery} from "@apollo/client";
 import { DataContext } from "../contex/DataProvider";
+import { Box,Tooltip, Stack } from "@mui/material";
+import { GET_SONGS } from "../graphQl/query";
+import { CustomSlider } from "../Styles/AudioPlayerStyles";
 import FastForwardIcon from "@mui/icons-material/FastForward";
 import FastRewindIcon from "@mui/icons-material/FastRewind";
 import VolumeDownIcon from "@mui/icons-material/VolumeDown";
-import PendingIcon from "@mui/icons-material/Pending";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
-import { Box, styled, Button, Slider, Tooltip, Stack } from "@mui/material";
+import PlayCircleIcon from "@mui/icons-material/PlayCircle";
+import PauseCircleFilledIcon from "@mui/icons-material/PauseCircleFilled";
 
-const PlayPauseButton = styled(Button)({
-  color: "#fff",
-  marginTop: "20px",
-  backgroundColor: "#f50057",
-  "&:hover": {
-    backgroundColor: "#c51162",
-  },
-});
-
-const CustomSlider = styled(Slider)({
-  color: "#ffffff",
-  alignItems: "center",
-  marks: "false",
-  "& .MuiSlider-rail": {
-    height: 5,
-  },
-  "& .MuiSlider-track": {
-    height: 5,
-  },
-  "& .MuiSlider-thumb": {
-    width: 0,
-    height: 0,
-    marginTop: -5,
-    marginLeft: -6,
-    "&:hover, &.Mui-focusVisible": {
-      boxShadow: "inherit",
-    },
-    "&::before": {
-      display: "none",
-    },
-  },
-});
 
 const AudioPlayer = () => {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [open, setOpen] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [volume, setVolume] = useState(1);
@@ -55,21 +21,10 @@ const AudioPlayer = () => {
   const [openVolume, setOpenVolume] = useState(false);
   const { songContex } = useContext(DataContext);
   const { setSongContex } = useContext(DataContext);
-
-  const GET_SONGS = gql`
-  query{
-    getSongs(playlistId: ${songContex.playlist},search:"") {
-      title,
-      photo,
-      duration,
-      artist,
-      url,
-      _id,
-    }
-  }`;
+  
 
   const songs = useQuery(GET_SONGS, {
-    variables: { playlistId: 1, search: "" },
+    variables: {playlistId:songContex.playlist},
   });
 
   useEffect(() => {

@@ -5,24 +5,15 @@ import { useQuery, gql } from "@apollo/client";
 import SongItem from "./SongItem";
 import { useContext } from "react";
 import { DataContext } from "../contex/DataProvider";
+import { GET_SONGS_SEARCH } from "../graphQl/query";
 import Next from "../assets/Next.png";
 import Prev from "../assets/Prev.png";
-
-const StyledStack = styled(Stack)`
-  "::hover": {
-    backgroundColor: "#fff",
-  },
-
-}
-`;
-
-const Loading = styled(Skeleton)`
-
-className={classes.songItem}
-
-ml="10px"
-width="80%"
-`;
+import {
+  Loading,
+  StyledInput,
+  StyledStack,
+  StyledName,
+} from "../Styles/TabStyles";
 
 const useStyles = makeStyles({
   root: {
@@ -32,122 +23,62 @@ const useStyles = makeStyles({
   },
 });
 
-const StyledInput = styled("input")({
-  "margin-top": "36px",
-  "margin-left": "56px",
-  "margin-left": "56px",
-  width: "82%",
-  height: "3rem",
-  background: "rgba(255, 255, 255, 0.06)",
-  "border-radius": "10px",
-  color: "#ffffff",
-  "font-family": "Varela Round",
-  "font-size": "20px",
-   alignItems:"center",
-  "padding-top": "2px",
-  "::placeholder": {
-    "padding-top": "2px",
-    color: "white",
-    "font-family": "Varela Round",
-    opacity: "0.2",
-    "font-size": "20px",
-  },
-  outline: "none",
-  border: "none",
-  
-});
-
-const Logo = styled("img")({
-  "margin-top":"32px",
-});
-
-const StyledName = styled(Typography)`
-
-  width: auto;
-  height: 36px;
-  font-family: "Varela Round";
-  font-weight: 700;
-  font-size: 32px;
-  color: #ffffff;
-  border: "0px";
-`;
-
-
-
 const MobileTabs = () => {
   const classes = useStyles();
   const { clickedPlaylist } = useContext(DataContext);
-  const {  setClickedPlaylist } = useContext(DataContext);
+  const { setClickedPlaylist } = useContext(DataContext);
   const [search, setSearchString] = useState("");
   const playlistId = clickedPlaylist.id;
   const playlistName = clickedPlaylist.name;
-  const {playlistList} = useContext(DataContext);
-  
-  const handleNext = ()=>{
-   if(clickedPlaylist.id < playlistList.length)
-    setClickedPlaylist({...clickedPlaylist,id:clickedPlaylist.id+1});
-  }
+  const { playlistList } = useContext(DataContext);
 
-  const handlePrev = ()=>{
-    if(clickedPlaylist.id >= 2)
-     setClickedPlaylist({...clickedPlaylist,id:clickedPlaylist.id-1});
-  }
-  
+  const handleNext = () => {
+    if (clickedPlaylist.id < playlistList.length)
+      setClickedPlaylist({ ...clickedPlaylist, id: clickedPlaylist.id + 1 });
+  };
 
-  const GET_SONGS = gql`
-  query{
-    getSongs(playlistId: ${playlistId},search:"${search}") {
-      title,
-      photo,
-      duration,
-      artist,
-      url,
-      _id
-    }
-  }`;
+  const handlePrev = () => {
+    if (clickedPlaylist.id >= 2)
+      setClickedPlaylist({ ...clickedPlaylist, id: clickedPlaylist.id - 1 });
+  };
 
-
-  const songs = useQuery(GET_SONGS, {
-    variables: { playlistId: 1, search: "" },
+  const songs = useQuery(GET_SONGS_SEARCH, {
+    variables: { playlistId: clickedPlaylist.id, search: search },
   });
 
-  
-
   return (
-    <Box maxHeight="70vh" 
+    <Box
+      maxHeight="70vh"
       sx={{
-        display: {
-          xs: "block",
-          sm: "block",
-          md: "block",
-          lg: "block",
-        },
-        
-        overflow:"clip",
+        overflow: "clip",
       }}
-      
     >
-    <Stack direction="row" justifyContent="space-between" spacing={0}>
-    <Box onClick={handlePrev}><Logo src={Prev}/></Box>
-      <Box>
-        <StyledName mt="15px" alignItem="flex-start">
-          { playlistList.length ? playlistList[clickedPlaylist.id-1].title : "Loading..."}
-        </StyledName>
-      </Box>      
-      <Box onClick={handleNext} ><Logo src={Next}/></Box>
-    </Stack>
-  
+      <Stack direction="row" justifyContent="space-between" spacing={0}>
+        <Box onClick={handlePrev}>
+          <img marginTop="32px" src={Prev} />
+        </Box>
+        <Box>
+          <StyledName mt="15px" alignItem="flex-start">
+            {playlistList.length
+              ? playlistList[clickedPlaylist.id - 1].title
+              : "Loading..."}
+          </StyledName>
+        </Box>
+        <Box onClick={handleNext}>
+          <img marginTop="32px" src={Next} />
+        </Box>
+      </Stack>
+
       <StyledInput
         fontFamily="Varela Round"
         color="white"
         type="search"
-        
         placeholder="Search Songs"
         value={search}
         onChange={(event) => setSearchString(event.target.value)}
       />
       <Box sx={{ overflow: "clip" }}>
-        <Box   >
+        <Box>
           <StyledStack
             direction="column"
             alignItems="left"
@@ -155,9 +86,8 @@ const MobileTabs = () => {
             gap="5px"
             className={classes.root}
             style={{
-                overflow: "auto",
-                maxHeight: "100vh",
-              
+              overflow: "auto",
+              maxHeight: "100vh",
             }}
           >
             {!songs.loading &&
@@ -177,7 +107,7 @@ const MobileTabs = () => {
                     borderRadius: "10px",
                     mt: "0px",
                     ml: "10px",
-                    width: "80%",
+                    width: "85%",
                   }}
                   animation="wave"
                   variant="text"
@@ -189,7 +119,7 @@ const MobileTabs = () => {
                     borderRadius: "10px",
                     mt: "0px",
                     ml: "10px",
-                    width: "80%",
+                    width: "85%",
                   }}
                   animation="wave"
                   variant="text"
@@ -201,7 +131,7 @@ const MobileTabs = () => {
                     borderRadius: "10px",
                     mt: "0px",
                     ml: "10px",
-                    width: "80%",
+                    width: "85%",
                   }}
                   animation="wave"
                   variant="text"
@@ -213,7 +143,7 @@ const MobileTabs = () => {
                     borderRadius: "10px",
                     mt: "0px",
                     ml: "10px",
-                    width: "80%",
+                    width: "85%",
                   }}
                   animation="wave"
                   variant="text"
@@ -225,7 +155,7 @@ const MobileTabs = () => {
                     borderRadius: "10px",
                     mt: "0px",
                     ml: "10px",
-                    width: "80%",
+                    width: "85%",
                   }}
                   animation="wave"
                   variant="text"
@@ -235,7 +165,7 @@ const MobileTabs = () => {
             )}
           </StyledStack>
         </Box>
-        </Box>
+      </Box>
     </Box>
   );
 };

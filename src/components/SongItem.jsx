@@ -4,6 +4,8 @@ import { Avatar } from "@mui/material";
 import { useContext } from "react";
 import { DataContext } from "../contex/DataProvider";
 import { makeStyles } from "@mui/styles";
+import { formatDuration } from "../utils/utilityFunctions";
+import { SongTitle, SongItemWrapper, ArtistName } from "../Styles/SongItem";
 
 const useStyles = makeStyles((theme) => ({
   songItem: {
@@ -15,52 +17,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SongTitle = styled(Typography)`
-  font-family: "Varela Round";
-  font-style: normal;
-  font-weight: 400;
-  font-size: 18px;
-  line-height: 24px;
-  color: #ffffff;
-`;
-
-const SongItemWrapper = styled(Box)`
-  border-radius: 10px;
-  padding: 12px;
-  display: flex;
-  margin: 10px;
-  width: 80%;
-
-  animation-name: fadeIn;
-  animation-duration: 0.9s;
-  animation-fill-mode: forwards;
-
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-`;
-
-const ArtistName = styled(Box)`
-  font-family: "Varela Round";
-  font-style: normal;
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 24px;
-  color: #ffffff;
-  opacity: 0.6;
-`;
-
-function formatDuration(durationInSeconds) {
-  const minutes = Math.floor(durationInSeconds / 60);
-  const seconds = durationInSeconds % 60;
-  return `${minutes}:${seconds.toString().padStart(2, "0")}`;
-}
-
 const SongItem = ({ index, playlistId, details }) => {
   const classes = useStyles();
 
@@ -70,14 +26,14 @@ const SongItem = ({ index, playlistId, details }) => {
     background: "",
     transition: "",
   };
-  console.log(songContex.id);
+
   if (details._id === songContex.id) {
     styleCurrent.background = "rgba(255, 255, 255, 0.2)";
     styleCurrent.transition = "all 0.5s ease";
   }
   return (
     <SongItemWrapper
-    style={styleCurrent}
+      style={styleCurrent}
       borderRadius="10px"
       padding="12px 12px 12px 12px"
       className={classes.songItem}
@@ -104,7 +60,7 @@ const SongItem = ({ index, playlistId, details }) => {
             playlist: playlistId,
             title: details.title,
             artist: details.artist,
-            id:details._id
+            id: details._id,
           })
         }
         sx={{ display: "flex", marginLeft: "10px" }}
